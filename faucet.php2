@@ -1,0 +1,169 @@
+<?php
+session_start();
+require_once 'db.php';
+
+if (!isset($_SESSION['wallet_address'])) {
+    header("Location: index.php");
+    exit;
+}
+
+// Obtener el balance y último tiempo de reclamo del usuario
+$query = $conn->prepare("SELECT balance, last_claim_time FROM Users WHERE wallet_address = ?");
+$query->bind_param("s", $_SESSION['wallet_address']);
+$query->execute();
+$result = $query->get_result();
+$userData = $result->fetch_assoc();
+
+$currentTime = time();
+$nextClaimTime = strtotime($userData['last_claim_time']) + 5 * 60; // Tiempo de espera de 5 minutos
+
+// Verifica si ya es tiempo para otro reclamo
+$canClaim = $currentTime >= $nextClaimTime;
+
+// Obtener configuración del claim
+$claimQuery = $conn->prepare("SELECT * FROM settings_claim WHERE id = 1");
+$claimQuery->execute();
+$claimConfig = $claimQuery->get_result()->fetch_assoc();
+
+// Obtener configuración del banner pop-up
+$bannerQuery = $conn->prepare("SELECT setting_value FROM settings WHERE setting_key = 'banner_pop_html'");
+$bannerQuery->execute();
+$bannerResult = $bannerQuery->get_result();
+$bannerData = $bannerResult->fetch_assoc();
+
+// Obtener claves de hCaptcha
+$hcaptchaQuery = $conn->prepare("SELECT setting_key, setting_value FROM settings WHERE setting_key LIKE 'hcaptcha_%_key'");
+$hcaptchaQuery->execute();
+$hcaptchaKeys = [];
+foreach ($hcaptchaQuery->get_result() as $row) {
+    $hcaptchaKeys[$row['setting_key']] = $row['setting_value'];
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USDT Rewards</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+</head>
+<body>
+    <div id="faucet-container">
+        <h1>USDT Rewards</h1>
+        <p>Your balance: <span id="user-balance"><?php echo number_format($userData['balance'], 6); ?></span> USDT</p>
+        <button id="claim-button" class="button-claim" onclick="showBanner()" <?php echo $canClaim ? '' : 'disabled'; ?>>
+            Claim <?php echo $claimConfig['reward_amount']; ?> USDT
+        </button>
+        <p id="cooldown-timer" style="<?php echo $canClaim ? 'display:none;' : ''; ?>">
+            Wait for the next claim: <span id="time"></span>
+        </p>
+        <button id="button-withdraw" onclick="window.location.href='withdraw.php'">
+            <i class="fa fa-wallet"></i> Withdraw
+        </button>
+        <button id="button-profile" onclick="window.location.href='profile.php'">
+            <i class="fa fa-user"></i> Profile
+        </button>
+    </div>
+
+    <div id="banner-pop" style="display:none;">
+        <span id="close-banner" onclick="closeBanner()">&times;</span>
+        <?php echo $bannerData['setting_value']; ?>
+        <form id="captcha-form" action="verify_captcha.php" method="POST">
+            <div class="h-captcha" data-sitekey="<?php echo $hcaptchaKeys['hcaptcha_site_key']; ?>"></div>
+            <button id="verify-button" type="submit">Verify</button>
+        </form>
+    </div>
+
+    <?php if (isset($_SESSION['error'])): ?>
+    <div id="error-pop">
+        <span id="close-error" onclick="closeError()">&times;</span>
+        <p id="error-message"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
+    </div>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['success'])): ?>
+    <div id="success-pop">
+        <span id="close-success" onclick="closeSuccess()">&times;</span>
+        <p id="success-message"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></p>
+    </div>
+    <?php endif; ?>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!<?php echo $canClaim ? 'true' : 'false'; ?>) {
+            updateCooldown();
+        }
+    });
+
+    function showBanner() {
+        document.getElementById('banner-pop').style.display = 'block';
+    }
+
+    function closeBanner() {
+        document.getElementById('banner-pop').style.display = 'none';
+    }
+
+    function closeError() {
+        document.getElementById('error-pop').style.display = 'none';
+    }
+
+    function closeSuccess() {
+        document.getElementById('success-pop').style.display = 'none';
+    }
+
+    function updateBalance(rewardAmount) {
+        const userBalanceElement = document.getElementById('user-balance');
+        const currentBalance = parseFloat(userBalanceElement.textContent);
+        const newBalance = (currentBalance + rewardAmount).toFixed(6);
+        userBalanceElement.textContent = newBalance;
+    }
+
+    function updateCooldown() {
+        let cooldownTimer = document.getElementById('cooldown-timer');
+        let timeDisplay = document.getElementById('time');
+        let remainingTime = <?php echo $nextClaimTime - time(); ?>;
+
+        let interval = setInterval(function() {
+            if (remainingTime <= 0) {
+                clearInterval(interval);
+                document.getElementById('claim-button').disabled = false;
+                cooldownTimer.style.display = 'none';
+            } else {
+                let minutes = Math.floor(remainingTime / 60);
+                let seconds = remainingTime % 60;
+                timeDisplay.textContent = `${minutes}m ${seconds}s`;
+                remainingTime--;
+            }
+        }, 1000);
+    }
+
+    // Verificar captcha
+    document.getElementById('captcha-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const form = event.target;
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', form.action, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    updateBalance(response.reward_amount);
+                    closeBanner();
+                } else {
+                    alert(response.message);
+                }
+            } else {
+                alert('An error occurred.');
+            }
+        };
+        const data = new FormData(form);
+        const params = new URLSearchParams(data).toString();
+        xhr.send(params);
+    });
+    </script>
+</body>
+</html>

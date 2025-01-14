@@ -1,0 +1,413 @@
+/* Estilos básicos para el contenedor principal */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1abc9c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#faucet-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+#faucet-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#faucet-container p {
+    font-size: 18px;
+    color: #666;
+    margin: 10px 0;
+}
+
+#faucet-container #user-balance {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.button-claim,
+#button-withdraw,
+#button-profile {
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.button-claim:hover,
+#button-withdraw:hover,
+#button-profile:hover {
+    background-color: #2980b9;
+}
+
+#button-profile {
+    background-color: #f39c12;
+}
+
+#banner-pop {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1050;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#banner-pop .banner-content {
+    width: 100%;
+}
+
+#close-banner {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+}
+
+#cooldown-timer {
+    font-size: 16px;
+    color: #e74c3c;
+    margin: 10px 0;
+}
+
+#error-pop, #success-pop {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 400px;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1050;
+}
+
+#error-pop {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#success-pop {
+    background-color: #2ecc71;
+    color: white;
+}
+
+#close-error, #close-success {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+
+/* INDEX DISEÑO */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1abc9c; /* Verde claro */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container-index {
+    width: 90%; /* Ajusta el ancho del contenedor para móviles */
+    max-width: 400px; /* Máximo ancho del contenedor */
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-index h1 {
+    color: #2c3e50; /* Azul oscuro */
+    font-size: 24px; /* Tamaño de fuente para el encabezado */
+}
+
+.header-index p {
+    color: #2c3e50; /* Azul oscuro */
+    font-size: 16px;
+    margin-bottom: 20px; /* Espacio debajo del párrafo */
+}
+
+.login-form-index input[type="text"] {
+    width: 100%; /* Utiliza todo el ancho disponible */
+    padding: 15px; /* Aumenta el padding para mejor accesibilidad */
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 2px solid #ddd;
+    box-sizing: border-box; /* Añade el padding dentro del ancho del input */
+}
+
+.login-form-index button {
+    width: 100%; /* El botón utiliza todo el ancho disponible */
+    padding: 12px;
+    background-color: #f1c40f; /* Amarillo */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px; /* Tamaño de fuente más grande para mejor legibilidad */
+    margin-top: 20px; /* Espacio superior para el botón */
+}
+
+.login-form-index button:hover {
+    background-color: #d1ac09; /* Un amarillo más oscuro para el efecto hover */
+}
+
+
+
+
+/* SECCIÓN RETIRO withdraw  */
+/* Estilos básicos para el contenedor principal */
+.container-withdraw-unique {
+    background-color: #1abc9c; /* Color de fondo verde claro */
+    padding: 20px;
+    text-align: center;
+    min-height: 100vh; /* Asegura que el contenedor ocupe al menos toda la altura de la ventana */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilos para el cuadro de balance */
+.balance-box-unique {
+    background-color: #3498db; /* Color de fondo azul */
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.balance-box-unique h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.balance-box-unique p {
+    font-size: 18px;
+    margin: 5px 0 0;
+}
+
+/* Estilos para los mensajes de error y éxito */
+.error-unique {
+    background-color: #e74c3c; /* Fondo rojo para los mensajes de error */
+    color: white;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.success-unique {
+    background-color: #2ecc71; /* Fondo verde para los mensajes de éxito */
+    color: white;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+/* Estilos para el formulario y sus elementos */
+form {
+    width: 100%;
+    max-width: 400px; /* Ancho máximo del formulario */
+    margin: 0 auto; /* Centra el formulario horizontalmente */
+}
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Estilos para los botones */
+button[type="submit"], .button-back-unique {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3498db; /* Color de fondo azul */
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* Estilos para el efecto hover en los botones */
+button[type="submit"]:hover, .button-back-unique:hover {
+    background-color: #2980b9; /* Color de fondo azul oscuro */
+}
+
+/* Estilos adicionales para el botón de regreso */
+.button-back-unique {
+    background-color: #f39c12; /* Color de fondo naranja */
+}
+
+.button-back-unique:hover {
+    background-color: #e67e22; /* Color de fondo naranja oscuro */
+}
+
+
+
+
+
+/* Estilos para el contenedor principal de profile.php */
+.container-profile-unique {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilos para el título */
+.container-profile-unique h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Estilos para las cajas de información */
+.balance-box-unique,
+.wallet-box-unique,
+.referral-box-unique {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    width: 90%;
+    max-width: 400px;
+}
+
+/* Estilos para el texto de las cajas de información */
+.balance-box-unique p,
+.wallet-box-unique p,
+.referral-box-unique p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Estilos para el botón de copiar código */
+.referral-box-unique button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+/* Estilos para el botón de copiar código en hover */
+.referral-box-unique button:hover {
+    background-color: #2980b9;
+}
+
+/* Estilos para el input de código de referido */
+.referral-box-unique input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Estilos para los enlaces */
+.referral-box-unique a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.referral-box-unique a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos para el botón de volver */
+.button-back-unique {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.button-back-unique i {
+    margin-right: 8px;
+}
+
+/* Estilos para el botón de volver en hover */
+.button-back-unique:hover {
+    background-color: #c0392b;
+}
+
+/* Estilos para la notificación de copiado */
+.copy-notification-unique {
+    background-color: #2ecc71;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: none;
+}
