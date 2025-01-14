@@ -1,0 +1,40 @@
+name: Deploy PHP Project to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Trigger workflow on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Step 2: Set up PHP
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2' # Specify PHP version
+        extensions: mbstring, curl, dom
+        ini-values: post_max_size=256M, upload_max_filesize=256M
+        tools: composer
+
+    # Step 3: Install dependencies (if any)
+    - name: Install Dependencies
+      run: composer install || true # Skip if no composer.json
+
+    # Step 4: Run tests (optional, modify if applicable)
+    - name: Run Tests
+      run: php -l *.php
+
+    # Step 5: Deploy to GitHub Pages
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages # Deployment branch
+        folder: . # Specify the root folder to deploy
+        clean: true
